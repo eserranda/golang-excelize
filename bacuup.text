@@ -1,0 +1,105 @@
+// package main
+
+// import (
+// 	"context"
+// 	"fmt"
+// 	"log"
+
+// 	"github.com/redis/go-redis/v9"
+// 	"github.com/xuri/excelize/v2"
+// )
+
+// var redisClient *redis.Client
+
+// func createRedisClient(ctx context.Context) *redis.Client {
+// 	client := redis.NewClient(&redis.Options{
+// 		Addr:     "localhost:6379",
+// 		Password: "",
+// 		DB:       0,
+// 	})
+
+// 	return client
+// }
+
+// func main() {
+// 	ctx := context.Background()
+
+// 	redisClient := createRedisClient(ctx)
+// 	defer redisClient.Close()
+
+// 	f, err := excelize.OpenFile("tes.xlsx")
+// 	if err != nil {
+// 		fmt.Println(err)
+// 		return
+// 	}
+
+// 	sheetName := "HSL PACK"
+// 	cellAddresses := []string{"A2", "I5"}
+
+// 	for _, cellAddress := range cellAddresses {
+// 		cellValue, err := f.GetCellValue(sheetName, cellAddress)
+// 		if err != nil {
+// 			fmt.Println(err)
+// 			return
+// 		}
+// 		// fmt.Printf("Nilai dari sel %s adalah: %s\n", cellAddress, cellValue)
+
+// 		key := "eser"
+// 		data := []string{cellValue}
+// 		fmt.Println(data)
+
+// 		SaveDataToRedis(redisClient, key, data)
+// 	}
+
+// 	// for _, cellAddress := range cellAddresses {
+// 	// 	cellValue, err := f.GetCellValue(sheetName, cellAddress)
+// 	// 	if err != nil {
+// 	// 		panic(err)
+// 	// 	}
+// 	// 	// fmt.Println(cellValue)
+// 	// 	values := strings.Split(cellValue, "\n")
+// 	// 	for _, value := range values {
+// 	// 		if len(value) >= 3 {
+// 	// 			kode := string(value[0])
+// 	// 			nilai := string(value[1])
+// 	// 			fmt.Println(kode, nilai)
+// 	// 			err := SaveDataToRedis(ctx, redisClient, kode, nilai)
+
+// 	// 			if err != nil {
+// 	// 				fmt.Println("Gagal Menyimpan data:", err)
+// 	// 				return
+// 	// 			}
+// 	// 		}
+// 	// 	}
+// 	// }
+
+// 	resultData, err := redisClient.LRange(ctx, "eser", 0, -1).Result()
+// 	fmt.Println("data redis :", resultData)
+// }
+
+// func SaveDataToRedis(client *redis.Client, key string, data []string) {
+// 	ctx := context.Background()
+// 	err := client.RPush(ctx, key, data).Err()
+// 	if err != nil {
+// 		log.Println("Error saving data to Redis:", err)
+// 	}
+// }
+
+// // func saveDataToRedis(client *redis.Client, key string, data []string) {
+// // 	err := client.RPush(ctx, key, data).Err()
+// // 	if err != nil {
+// // 		log.Println("Error saving data to Redis:", err)
+// // 	}
+// // }
+
+// // func getDataFromRedis(client *redis.Client, key string) {
+// // 	result, err := client.LRange(ctx, key, 0, -1).Result()
+// // 	if err != nil {
+// // 		log.Println("Error getting data from Redis:", err)
+// // 	}
+
+// // 	fmt.Println("Data in Redis:")
+// // 	for i, data := range result {
+// // 		fmt.Printf("%d. %s\n", i+1, data)
+// // 	}
+// // }
